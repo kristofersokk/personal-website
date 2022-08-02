@@ -31,7 +31,6 @@ const useSmoothZoom = ({ initialZoom, range, pinchElement }: UseSmoothZoomProps)
 		setZoom(() => {
 			const newZoom = zoom + delta * ZOOM_SPEED;
 			const clampedZoom = Math.min(Math.max(newZoom, range[0]), range[1]);
-			console.log(`New zoom: ${clampedZoom}`);
 			return clampedZoom;
 		});
 	};
@@ -44,7 +43,6 @@ const useSmoothZoom = ({ initialZoom, range, pinchElement }: UseSmoothZoomProps)
 
 	const { pinchState } = usePinchZoom(pinchElement);
 	const prevPinchState = usePrevious(pinchState);
-	console.log(pinchState);
 
 	useEffect(() => {
 		if (prevPinchState !== undefined && prevPinchState !== pinchState) {
@@ -56,7 +54,7 @@ const useSmoothZoom = ({ initialZoom, range, pinchElement }: UseSmoothZoomProps)
 };
 
 const ZoomCamera = ({ canvasRef }: { canvasRef: RefObject<HTMLCanvasElement> }) => {
-	const zoom = useSmoothZoom({ initialZoom: 6, range: [-120, 0], pinchElement: canvasRef });
+	const zoom = useSmoothZoom({ initialZoom: 0, range: [-120, 0], pinchElement: canvasRef });
 
 	return <PerspectiveCamera makeDefault position={[0, 0, 10 - zoom]} />;
 };
@@ -68,9 +66,11 @@ const MainCanvas: FC = () => {
 	const [sideLength, setSideLength] = useState(11);
 	const [boxGap, setBoxGap] = useState(0.1);
 
+	const { pinchState } = usePinchZoom(canvasRef);
+
 	return (
 		<div className="h-screen w-screen">
-			<Canvas ref={canvasRef}>
+			<Canvas ref={canvasRef} className="touch-pinch-zoom">
 				<ambientLight />
 				<pointLight position={[10, 10, 10]} />
 				<ZoomCamera canvasRef={canvasRef} />
@@ -94,27 +94,36 @@ const MainCanvas: FC = () => {
 				<Stats />
 			</Canvas>
 			<div className="absolute top-0 left-0 w-full p-4">
-				<div className="flex justify-center gap-3">
-					<span>Use Single Draw Call</span>
-					<Switch onChange={(checked) => setSingleDrawCall(checked)} checked={singleDrawCall} />
-					<span>Side length: {sideLength}</span>
-					<input
-						type="range"
-						min="1"
-						max="79"
-						step="2"
-						value={sideLength}
-						onChange={(e) => setSideLength(Number(e.target.value))}
-					/>
-					<span>Box gap: {boxGap}</span>
-					<input
-						type="range"
-						min="0"
-						max="2"
-						step="0.01"
-						value={boxGap}
-						onChange={(e) => setBoxGap(Number(e.target.value))}
-					/>
+				<div className="flex flex-wrap justify-center gap-3">
+					<div className="flex gap-3">
+						<span>Use Single Draw Call</span>
+						<Switch onChange={(checked) => setSingleDrawCall(checked)} checked={singleDrawCall} />
+					</div>
+					<div className="flex gap-3">
+						<span>Side length: {sideLength}</span>
+						<input
+							type="range"
+							min="1"
+							max="79"
+							step="2"
+							value={sideLength}
+							onChange={(e) => setSideLength(Number(e.target.value))}
+						/>
+					</div>
+					<div className="flex gap-3">
+						<span>Box gap: {boxGap}</span>
+						<input
+							type="range"
+							min="0"
+							max="2"
+							step="0.01"
+							value={boxGap}
+							onChange={(e) => setBoxGap(Number(e.target.value))}
+						/>
+					</div>
+					<div className="flex gap-3">
+						<span>Pinch state: {pinchState}</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -179,11 +188,6 @@ const calculateBox = (
 	}
 	const distance = Math.sqrt((x - halfSide) ** 2 + (y - halfSide) ** 2);
 	const { r, g, b } = HSVtoRGB(hue + distance * 0.04, 1, 0.3);
-	console.log({
-		r,
-		g,
-		b,
-	});
 	const color = new Color(r / 255, g / 255, b / 255);
 
 	return {
