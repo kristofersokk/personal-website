@@ -65,7 +65,7 @@ const MainCanvas: FC = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	const [singleDrawCall, setSingleDrawCall] = useState(false);
-	const [halfSide, sethalfSide] = useState(10);
+	const [sideLength, setSideLength] = useState(11);
 	const [boxGap, setBoxGap] = useState(0.1);
 
 	return (
@@ -86,9 +86,9 @@ const MainCanvas: FC = () => {
 					config={{ mass: 0.04, tension: 300, friction: 25 }} // Spring config
 				>
 					{singleDrawCall ? (
-						<BoxesInstances halfSide={halfSide} boxGap={boxGap} />
+						<BoxesInstances sideLength={sideLength} boxGap={boxGap} />
 					) : (
-						<Boxes halfSide={halfSide} boxGap={boxGap} />
+						<Boxes sideLength={sideLength} boxGap={boxGap} />
 					)}
 				</PresentationControls>
 				<Stats />
@@ -97,8 +97,15 @@ const MainCanvas: FC = () => {
 				<div className="flex justify-center gap-3">
 					<span>Use Single Draw Call</span>
 					<Switch onChange={(checked) => setSingleDrawCall(checked)} checked={singleDrawCall} />
-					<span>Half Side: {halfSide}</span>
-					<input type="range" min="0" max="80" value={halfSide} onChange={(e) => sethalfSide(Number(e.target.value))} />
+					<span>Side length: {sideLength}</span>
+					<input
+						type="range"
+						min="1"
+						max="79"
+						step="2"
+						value={sideLength}
+						onChange={(e) => setSideLength(Number(e.target.value))}
+					/>
 					<span>Box gap: {boxGap}</span>
 					<input
 						type="range"
@@ -159,17 +166,18 @@ function HSVtoRGB(h: number, s: number, v: number) {
 const calculateBox = (
 	x: number,
 	y: number,
-	halfSide: number,
+	sideLength: number,
 	boxGap: number,
 ): {
 	position: [number, number, number];
 	color: Color;
 } => {
-	let hue = Math.atan2(y - halfSide / 2, x - halfSide / 2) / 2 / Math.PI;
+	const halfSide = (sideLength - 1) / 2;
+	let hue = Math.atan2(y - halfSide, x - halfSide) / 2 / Math.PI;
 	if (hue < 0) {
 		hue += 1;
 	}
-	const distance = Math.sqrt((x - halfSide / 2) ** 2 + (y - halfSide / 2) ** 2);
+	const distance = Math.sqrt((x - halfSide) ** 2 + (y - halfSide) ** 2);
 	const { r, g, b } = HSVtoRGB(hue + distance * 0.04, 1, 0.3);
 	console.log({
 		r,
@@ -179,18 +187,18 @@ const calculateBox = (
 	const color = new Color(r / 255, g / 255, b / 255);
 
 	return {
-		position: [(boxGap + 1) * x - (halfSide / 2) * (boxGap + 1), 0, (boxGap + 1) * y - (halfSide / 2) * (boxGap + 1)],
+		position: [(boxGap + 1) * x - halfSide * (boxGap + 1), 0, (boxGap + 1) * y - halfSide * (boxGap + 1)],
 		color,
 	};
 };
 
-const Boxes: FC<{ halfSide: number; boxGap: number }> = ({ halfSide, boxGap }) => {
+const Boxes: FC<{ sideLength: number; boxGap: number }> = ({ sideLength, boxGap }) => {
 	return (
 		<>
-			{[...Array(halfSide + 1).keys()].map((x) => (
+			{[...Array(sideLength).keys()].map((x) => (
 				<Fragment key={x}>
-					{[...Array(halfSide + 1).keys()].map((y) => {
-						const { position, color } = calculateBox(x, y, halfSide, boxGap);
+					{[...Array(sideLength).keys()].map((y) => {
+						const { position, color } = calculateBox(x, y, sideLength, boxGap);
 						return (
 							<mesh key={`${x}-${y}`} position={position}>
 								<boxGeometry args={[1, 1, 1]} />
@@ -204,18 +212,18 @@ const Boxes: FC<{ halfSide: number; boxGap: number }> = ({ halfSide, boxGap }) =
 	);
 };
 
-const BoxesInstances: FC<{ halfSide: number; boxGap: number }> = ({ halfSide, boxGap }) => {
+const BoxesInstances: FC<{ sideLength: number; boxGap: number }> = ({ sideLength, boxGap }) => {
 	return (
 		<Instances
-			limit={(halfSide + 3) * halfSide} // Optional: max amount of items (for calculating buffer size)
+			limit={(sideLength + 3) * sideLength} // Optional: max amount of items (for calculating buffer size)
 			position={[0, 0, 0]} // Optional: initial position
 		>
 			<boxGeometry args={[1, 1, 1]} />
 			<meshStandardMaterial />
-			{[...Array(halfSide + 1).keys()].map((x) => (
+			{[...Array(sideLength).keys()].map((x) => (
 				<Fragment key={x}>
-					{[...Array(halfSide + 1).keys()].map((y) => {
-						const { position, color } = calculateBox(x, y, halfSide, boxGap);
+					{[...Array(sideLength).keys()].map((y) => {
+						const { position, color } = calculateBox(x, y, sideLength, boxGap);
 						return <Instance key={`${x}-${y}`} position={position} color={color} />;
 					})}
 				</Fragment>
