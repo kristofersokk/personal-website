@@ -19,6 +19,7 @@ export const WoodMaterial = () => (
 		transparent={false}
 		alphaTest={0.0}
 		normalMap={normalDx}
+		// @ts-ignore
 		normalScale={[0.5, 0.5]}
 		aoMap={ambientOcclusion}
 		aoMapIntensity={1}
