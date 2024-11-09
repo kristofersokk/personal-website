@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.absolute {
+	overflow: hidden;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+#root {
+	@apply w-[100vw] h-[100vh];
+}
