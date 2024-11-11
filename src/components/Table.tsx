@@ -9,7 +9,7 @@ import { Html, useHelper } from '@react-three/drei';
 import { useMemo } from 'react';
 import { Euler, SpotLight, SpotLightHelper } from 'three';
 
-import { CoffeeMug } from './CoffeeMug';
+import { CoffeeMug } from '../models/CoffeeMug';
 
 function Table() {
 	const warmLight = rgbToHex(...colorTemperatureToRGB(3500));

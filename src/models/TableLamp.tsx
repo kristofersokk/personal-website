@@ -6,6 +6,7 @@ Source: https://sketchfab.com/3d-models/modern-black-table-lamp-eb5bdce013e2406c
 Title: Modern Black Table Lamp
 */
 
+import { createExternalResource } from '@/utils/resourceUtils';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
@@ -25,8 +26,12 @@ type GLTFResult = GLTF & {
 	};
 };
 
+const localPath = 'models/modern_black_table_lamp.glb';
+const uploadThingId = 'ayWUAmbcwFZQbBqyQGzVAzg7oiwlhYu4PmHcFrL59fsBDxN6';
+const externalResource = createExternalResource(localPath, uploadThingId);
+
 export function TableLamp(props: JSX.IntrinsicElements['group']) {
-	const { nodes, materials } = useGLTF('/models/modern_black_table_lamp.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF(externalResource) as GLTFResult;
 	return (
 		<group {...props} dispose={null} scale={[0.001, 0.001, -0.001]}>
 			<group rotation={[-Math.PI / 2, 0, 0]}>
@@ -59,4 +64,4 @@ export function TableLamp(props: JSX.IntrinsicElements['group']) {
 	);
 }
 
-useGLTF.preload('/models/modern_black_table_lamp.glb');
+useGLTF.preload(externalResource);

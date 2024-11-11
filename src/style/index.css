@@ -10,6 +10,11 @@
 	navigation: auto;
 }
 
+body {
+	height: 100dvh;
+	@apply bg-black;
+}
+
 #root {
-	@apply w-[100vw] h-[100vh];
+	@apply w-full h-full;
 }

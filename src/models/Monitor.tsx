@@ -6,6 +6,7 @@ Source: https://sketchfab.com/3d-models/simple-monitor-b26a53419075442ca284cdf1d
 Title: Simple Monitor
 */
 
+import { createExternalResource } from '@/utils/resourceUtils';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
@@ -35,8 +36,12 @@ type GLTFResult = GLTF & {
 	};
 };
 
+const localPath = 'models/simple_monitor.glb';
+const uploadThingId = 'ayWUAmbcwFZQgX7ouhLYGX0tm6kl3AKdUrPjhVF7zx5sqwi8';
+const externalResource = createExternalResource(localPath, uploadThingId);
+
 export function Monitor(props: JSX.IntrinsicElements['group']) {
-	const { nodes, materials } = useGLTF('/models/simple_monitor.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF(externalResource) as GLTFResult;
 
 	materials['Mat.2'].roughness = 0.8;
 
@@ -155,4 +160,4 @@ export function Monitor(props: JSX.IntrinsicElements['group']) {
 	);
 }
 
-useGLTF.preload('/models/simple_monitor.glb');
+useGLTF.preload(externalResource);

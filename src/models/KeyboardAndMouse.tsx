@@ -6,6 +6,7 @@ Source: https://sketchfab.com/3d-models/mouse-and-keyboard-d91b625d38a64ed39c1df
 Title: Mouse and Keyboard
 */
 
+import { createExternalResource } from '@/utils/resourceUtils';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
@@ -43,8 +44,12 @@ type GLTFResult = GLTF & {
 	};
 };
 
+const localPath = 'models/mouse_and_keyboard.glb';
+const uploadThingId = 'ayWUAmbcwFZQqkwF2Xjc5VmiD8b1SwPafE9ku2snHQZjypT0';
+const externalResource = createExternalResource(localPath, uploadThingId);
+
 export function KeyboardAndMouse(props: JSX.IntrinsicElements['group']) {
-	const { nodes, materials } = useGLTF('/models/mouse_and_keyboard.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF(externalResource) as GLTFResult;
 	return (
 		<group {...props} dispose={null}>
 			<group scale={0.01}>
@@ -245,4 +250,4 @@ export function KeyboardAndMouse(props: JSX.IntrinsicElements['group']) {
 	);
 }
 
-useGLTF.preload('/models/mouse_and_keyboard.glb');
+useGLTF.preload(externalResource);

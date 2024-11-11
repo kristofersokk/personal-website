@@ -6,9 +6,9 @@ Source: https://sketchfab.com/3d-models/coffee-cup-992750b0df674378989fa915b0688
 Title: Coffee Cup
 */
 
-import * as THREE from 'three';
-import React, { useRef } from 'react';
+import { createExternalResource } from '@/utils/resourceUtils';
 import { useGLTF } from '@react-three/drei';
+import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
 
 type GLTFResult = GLTF & {
@@ -20,8 +20,12 @@ type GLTFResult = GLTF & {
 	};
 };
 
+const localPath = 'models/coffee_cup.glb';
+const uploadThingId = 'ayWUAmbcwFZQJTwmTIg7EvFUGfmSCukPROQ0aZYiJcAqLgeT';
+const externalResource = createExternalResource(localPath, uploadThingId);
+
 export function CoffeeMug(props: JSX.IntrinsicElements['group']) {
-	const { nodes, materials } = useGLTF('/models/coffee_cup.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF(externalResource) as GLTFResult;
 
 	return (
 		<group {...props} dispose={null} scale={0.8}>
@@ -38,4 +42,4 @@ export function CoffeeMug(props: JSX.IntrinsicElements['group']) {
 	);
 }
 
-useGLTF.preload('/models/coffee_cup.glb');
+useGLTF.preload(externalResource);

@@ -6,6 +6,7 @@ Source: https://sketchfab.com/3d-models/basic-pc-monitors-58a2dba70e4f4752962ee9
 Title: Basic PC Monitors
 */
 
+import { createExternalResource } from '@/utils/resourceUtils';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
@@ -23,8 +24,12 @@ type GLTFResult = GLTF & {
 	};
 };
 
+const localPath = 'models/basic_pc_monitors.glb';
+const uploadThingId = 'ayWUAmbcwFZQ0OVsJp4dV2jUQ9Y7tBC8uZqeOEXpRdAIys34';
+const externalResource = createExternalResource(localPath, uploadThingId);
+
 export function WidescreenMonitor(props: JSX.IntrinsicElements['group']) {
-	const { nodes, materials } = useGLTF('/models/basic_pc_monitors.glb') as GLTFResult;
+	const { nodes, materials } = useGLTF(externalResource) as GLTFResult;
 
 	materials.T_wide_monitor.roughness = 0.3;
 
@@ -64,4 +69,4 @@ export function WidescreenMonitor(props: JSX.IntrinsicElements['group']) {
 	);
 }
 
-useGLTF.preload('/models/basic_pc_monitors.glb');
+useGLTF.preload(externalResource);
