@@ -15,7 +15,7 @@ function Scene(props: {
 			<Canvas
 				shadows
 				ref={canvasRef}
-				className={classNames('transition-opacity duration-300', {
+				className={classNames('transition-opacity duration-300 touch-none', {
 					'blur-lg': isLoading,
 					'opacity-100': !isLoading,
 					'opacity-0': isLoading,
