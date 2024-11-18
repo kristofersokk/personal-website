@@ -1,21 +1,15 @@
-import { FC, Fragment, RefObject, useRef, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { PresentationControls } from '@react-three/drei/web/PresentationControls';
-import usePinchZoom from 'react-use/lib/usePinchZoom';
+import ZoomCamera from '@/components/3d/ZoomCamera';
+import { HSVtoRGB } from '@/utils/colorUtils';
 import { Instance, Instances } from '@react-three/drei/core/Instances';
 import { Stats } from '@react-three/drei/core/Stats';
+import { PresentationControls } from '@react-three/drei/web/PresentationControls';
+import { Canvas } from '@react-three/fiber';
+import { FC, Fragment, useRef, useState } from 'react';
 import Switch from 'react-switch';
+import usePinchZoom from 'react-use/lib/usePinchZoom';
 import { Color } from 'three/src/math/Color.js';
-import { createLazyFileRoute } from '@tanstack/react-router';
-import { HSVtoRGB } from '@/utils/colorUtils';
-import ZoomCamera from '@/components/ZoomCamera';
 
-export const Route = createLazyFileRoute('/experiments/three-js-test')({
-	pendingComponent: () => <div>Loading...</div>,
-	component: ThreeJSTest,
-});
-
-function ThreeJSTest() {
+function BoxesTest() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	const [singleDrawCall, setSingleDrawCall] = useState(false);
@@ -43,7 +37,11 @@ function ThreeJSTest() {
 							azimuth={[-Infinity, Infinity]} // Horizontal limits
 							config={{ mass: 0.04, tension: 300, friction: 25 }} // Spring config
 						>
-							{singleDrawCall ? <BoxesInstances sideLength={sideLength} boxGap={boxGap} /> : <Boxes sideLength={sideLength} boxGap={boxGap} />}
+							{singleDrawCall ? (
+								<BoxesInstances sideLength={sideLength} boxGap={boxGap} />
+							) : (
+								<Boxes sideLength={sideLength} boxGap={boxGap} />
+							)}
 						</PresentationControls>
 						<Stats />
 					</Canvas>
@@ -51,15 +49,32 @@ function ThreeJSTest() {
 						<div className="flex flex-wrap justify-center gap-3">
 							<div className="flex gap-3">
 								<span>Use Single Draw Call</span>
-								<Switch onChange={(checked) => setSingleDrawCall(checked)} checked={singleDrawCall} />
+								<Switch
+									onChange={(checked) => setSingleDrawCall(checked)}
+									checked={singleDrawCall}
+								/>
 							</div>
 							<div className="flex gap-3">
 								<span>Side length: {sideLength}</span>
-								<input type="range" min="1" max="79" step="2" value={sideLength} onChange={(e) => setSideLength(Number(e.target.value))} />
+								<input
+									type="range"
+									min="1"
+									max="79"
+									step="2"
+									value={sideLength}
+									onChange={(e) => setSideLength(Number(e.target.value))}
+								/>
 							</div>
 							<div className="flex gap-3">
 								<span>Box gap: {boxGap}</span>
-								<input type="range" min="0" max="2" step="0.01" value={boxGap} onChange={(e) => setBoxGap(Number(e.target.value))} />
+								<input
+									type="range"
+									min="0"
+									max="2"
+									step="0.01"
+									value={boxGap}
+									onChange={(e) => setBoxGap(Number(e.target.value))}
+								/>
 							</div>
 							<div className="flex gap-3">
 								<span>Pinch state: {pinchState}</span>
@@ -91,7 +106,11 @@ const calculateBox = (
 	const color = new Color(r / 255, g / 255, b / 255);
 
 	return {
-		position: [(boxGap + 1) * x - halfSide * (boxGap + 1), 0, (boxGap + 1) * y - halfSide * (boxGap + 1)],
+		position: [
+			(boxGap + 1) * x - halfSide * (boxGap + 1),
+			0,
+			(boxGap + 1) * y - halfSide * (boxGap + 1),
+		],
 		color,
 	};
 };
@@ -135,3 +154,5 @@ const BoxesInstances: FC<{ sideLength: number; boxGap: number }> = ({ sideLength
 		</Instances>
 	);
 };
+
+export default BoxesTest;

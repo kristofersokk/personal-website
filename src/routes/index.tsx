@@ -1,5 +1,4 @@
-import Room from '@/components/Room';
-import Scene from '@/components/Scene';
+import MainPage from '@/components/MainPage';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
@@ -7,5 +6,5 @@ export const Route = createFileRoute('/')({
 });
 
 function Index() {
-	return <Scene>{(canvasRef) => <Room canvasRef={canvasRef} />}</Scene>;
+	return <MainPage />;
 }

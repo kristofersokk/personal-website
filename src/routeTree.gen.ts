@@ -8,19 +8,12 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as ExperimentsIndexImport } from './routes/experiments/index'
-
-// Create Virtual Routes
-
-const ExperimentsThreeJsTestLazyImport = createFileRoute(
-  '/experiments/three-js-test',
-)()
+import { Route as ExperimentsRoomImport } from './routes/experiments/room'
+import { Route as ExperimentsBoxesImport } from './routes/experiments/boxes'
 
 // Create/Update Routes
 
@@ -30,21 +23,17 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExperimentsIndexRoute = ExperimentsIndexImport.update({
-  id: '/experiments/',
-  path: '/experiments/',
+const ExperimentsRoomRoute = ExperimentsRoomImport.update({
+  id: '/experiments/room',
+  path: '/experiments/room',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ExperimentsThreeJsTestLazyRoute = ExperimentsThreeJsTestLazyImport.update(
-  {
-    id: '/experiments/three-js-test',
-    path: '/experiments/three-js-test',
-    getParentRoute: () => rootRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/experiments/three-js-test.lazy').then((d) => d.Route),
-)
+const ExperimentsBoxesRoute = ExperimentsBoxesImport.update({
+  id: '/experiments/boxes',
+  path: '/experiments/boxes',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -57,18 +46,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/experiments/three-js-test': {
-      id: '/experiments/three-js-test'
-      path: '/experiments/three-js-test'
-      fullPath: '/experiments/three-js-test'
-      preLoaderRoute: typeof ExperimentsThreeJsTestLazyImport
+    '/experiments/boxes': {
+      id: '/experiments/boxes'
+      path: '/experiments/boxes'
+      fullPath: '/experiments/boxes'
+      preLoaderRoute: typeof ExperimentsBoxesImport
       parentRoute: typeof rootRoute
     }
-    '/experiments/': {
-      id: '/experiments/'
-      path: '/experiments'
-      fullPath: '/experiments'
-      preLoaderRoute: typeof ExperimentsIndexImport
+    '/experiments/room': {
+      id: '/experiments/room'
+      path: '/experiments/room'
+      fullPath: '/experiments/room'
+      preLoaderRoute: typeof ExperimentsRoomImport
       parentRoute: typeof rootRoute
     }
   }
@@ -78,42 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/experiments/three-js-test': typeof ExperimentsThreeJsTestLazyRoute
-  '/experiments': typeof ExperimentsIndexRoute
+  '/experiments/boxes': typeof ExperimentsBoxesRoute
+  '/experiments/room': typeof ExperimentsRoomRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/experiments/three-js-test': typeof ExperimentsThreeJsTestLazyRoute
-  '/experiments': typeof ExperimentsIndexRoute
+  '/experiments/boxes': typeof ExperimentsBoxesRoute
+  '/experiments/room': typeof ExperimentsRoomRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/experiments/three-js-test': typeof ExperimentsThreeJsTestLazyRoute
-  '/experiments/': typeof ExperimentsIndexRoute
+  '/experiments/boxes': typeof ExperimentsBoxesRoute
+  '/experiments/room': typeof ExperimentsRoomRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/experiments/three-js-test' | '/experiments'
+  fullPaths: '/' | '/experiments/boxes' | '/experiments/room'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/experiments/three-js-test' | '/experiments'
-  id: '__root__' | '/' | '/experiments/three-js-test' | '/experiments/'
+  to: '/' | '/experiments/boxes' | '/experiments/room'
+  id: '__root__' | '/' | '/experiments/boxes' | '/experiments/room'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ExperimentsThreeJsTestLazyRoute: typeof ExperimentsThreeJsTestLazyRoute
-  ExperimentsIndexRoute: typeof ExperimentsIndexRoute
+  ExperimentsBoxesRoute: typeof ExperimentsBoxesRoute
+  ExperimentsRoomRoute: typeof ExperimentsRoomRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ExperimentsThreeJsTestLazyRoute: ExperimentsThreeJsTestLazyRoute,
-  ExperimentsIndexRoute: ExperimentsIndexRoute,
+  ExperimentsBoxesRoute: ExperimentsBoxesRoute,
+  ExperimentsRoomRoute: ExperimentsRoomRoute,
 }
 
 export const routeTree = rootRoute
@@ -127,18 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/experiments/three-js-test",
-        "/experiments/"
+        "/experiments/boxes",
+        "/experiments/room"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/experiments/three-js-test": {
-      "filePath": "experiments/three-js-test.lazy.tsx"
+    "/experiments/boxes": {
+      "filePath": "experiments/boxes.tsx"
     },
-    "/experiments/": {
-      "filePath": "experiments/index.tsx"
+    "/experiments/room": {
+      "filePath": "experiments/room.tsx"
     }
   }
 }

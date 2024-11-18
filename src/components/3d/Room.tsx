@@ -1,14 +1,17 @@
 import useSmoothScrollValue from '@/hooks/useSmoothScrollValue';
-import { PerspectiveCamera } from '@react-three/drei/core';
+import { PerspectiveCamera, Stats } from '@react-three/drei/core';
 import { PresentationControls } from '@react-three/drei/web/PresentationControls';
-import { useState } from 'react';
+import { useThree } from '@react-three/fiber';
+import { useContext, useState } from 'react';
 import { DirectionalLightShadow } from 'three/src/lights/DirectionalLightShadow.js';
 
+import { CanvasRefContext } from './Scene';
 import Table from './Table';
 import Wall from './Wall';
-import { useThree } from '@react-three/fiber';
 
-function Room({ canvasRef }: { canvasRef: React.RefObject<HTMLCanvasElement> }) {
+function Room() {
+	const canvasRef = useContext(CanvasRefContext)!;
+
 	const cameraPosDelta = useSmoothScrollValue({
 		initialValue: 0,
 		range: [-2, 4],
@@ -27,9 +30,9 @@ function Room({ canvasRef }: { canvasRef: React.RefObject<HTMLCanvasElement> }) 
 
 	return (
 		<>
-			<PerspectiveCamera makeDefault position={[0, 1.3, 1.5 - cameraPosDelta]} zoom={1} />
+			<PerspectiveCamera makeDefault position={[0, 0, 1.5 - cameraPosDelta]} zoom={1} />
 			<PresentationControls
-				global={false} // Spin globally or by dragging the model
+				global // Spin globally or by dragging the model
 				cursor={true} // Whether to toggle cursor style on drag
 				snap={false} // Snap-back to center (can also be a spring config)
 				// speed={2} // Speed factor
@@ -50,6 +53,7 @@ function Room({ canvasRef }: { canvasRef: React.RefObject<HTMLCanvasElement> }) 
 				<Table />
 				<Wall />
 			</PresentationControls>
+			<Stats />
 		</>
 	);
 }

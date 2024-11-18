@@ -11,10 +11,15 @@
 }
 
 body {
-	height: 100dvh;
-	@apply bg-black;
+	min-height: 100dvh;
+	@apply bg-slate-800;
 }
 
 #root {
-	@apply w-full h-full;
+	@apply w-full min-h-[100dvh];
+}
+
+@font-face {
+	font-family: AntipastoPro;
+	src: url('/fonts/AntipastoPro/antipasto.light.ttf') format('truetype');
 }

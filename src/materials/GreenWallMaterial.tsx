@@ -35,7 +35,7 @@ const roughness = textureLoader.load(
 	),
 );
 
-const scale = 8;
+const scale = 64;
 
 ambientOcclusion.wrapS = RepeatWrapping;
 ambientOcclusion.wrapT = RepeatWrapping;
@@ -56,13 +56,13 @@ export const GreenWallMaterial = () => (
 		map={color}
 		color={new Color('#3B4537').convertLinearToSRGB()}
 		transparent={false}
-		alphaTest={0.5}
-		// normalMap={normalGl}
-		// normalScale={[1, 1]}
+		normalMap={normalGl}
+		// @ts-expect-error
+		normalScale={[0, -20]}
 		aoMap={ambientOcclusion}
 		aoMapIntensity={1}
 		roughnessMap={roughness}
-		roughness={0}
+		roughness={10}
 		// displacementMap={displacement}
 		// displacementScale={100}
 	/>

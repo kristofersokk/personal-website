@@ -9,7 +9,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': '/src',
-			'/external-assets': '/src/external-assets',
+			'/external-resources': '/src/external-resources',
 		},
 	},
 });
