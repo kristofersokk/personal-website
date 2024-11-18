@@ -68,28 +68,28 @@ function MainPage() {
 					<div className="flex flex-col gap-4">
 						<ImageWithLabel
 							className="rounded-lg"
-							src="https://utfs.io/f/ayWUAmbcwFZQMij7cZMlMtNUg8Kc4jSwAR7sXZWGm2xpH1Vu"
+							src="https://utfs.io/f/ayWUAmbcwFZQC2QF4NRhH5PqWApSdkOBaYIe7w9jo86ECULl"
 							alt="Kristofer Sokk black and white"
 							width={300}
 							label="Me"
 						/>
 						<ImageWithLabel
 							className="rounded-lg"
-							src="https://utfs.io/f/ayWUAmbcwFZQ5EQUpfKAoryQbhN83tMDYFqjT9u1leiw4H0R"
+							src="https://utfs.io/f/ayWUAmbcwFZQlSQEsExJumZslMONF8K7gTaYy3zckQ4WCojD"
 							alt="Collection of board games"
 							width={300}
 							label="Board games"
 						/>
 						<ImageWithLabel
 							className="rounded-lg"
-							src="https://utfs.io/f/ayWUAmbcwFZQMZcOn3lMtNUg8Kc4jSwAR7sXZWGm2xpH1Vud"
+							src="https://utfs.io/f/ayWUAmbcwFZQdROSvMFykDToweE6VYAplbHqtUNJBIgR9jZx"
 							alt="Playing video games"
 							width={300}
 							label="Video games"
 						/>
 						<ImageWithLabel
 							className="rounded-lg row-span-2"
-							src="https://utfs.io/f/ayWUAmbcwFZQ5e86kSKAoryQbhN83tMDYFqjT9u1leiw4H0R"
+							src="https://utfs.io/f/ayWUAmbcwFZQc5ANxbBseWpvPnyqwhRKTorf27bLUum5XF6J"
 							alt="On my way to sing at Laulupidu"
 							width={300}
 							label="Singing"
@@ -98,14 +98,14 @@ function MainPage() {
 					<div className="flex flex-col gap-4">
 						<ImageWithLabel
 							className="rounded-lg row-span-2"
-							src="https://utfs.io/f/ayWUAmbcwFZQajKuinbcwFZQDxsKmna8boWqTYPOGNEltd5J"
+							src="https://utfs.io/f/ayWUAmbcwFZQ8IIxXjV6nRiDuwYxUQ3ZPbk9AodEvcJsgL40"
 							alt="Lelle 22 - Enefit office"
 							width={300}
 							label="My office - Enefit AS"
 						/>
 						<ImageWithLabel
 							className="rounded-lg"
-							src="https://utfs.io/f/ayWUAmbcwFZQowwG1XJo5hryc8uRM0amAfXnTLGJi6VOdpYe"
+							src="https://utfs.io/f/ayWUAmbcwFZQkiQSQ1yV7tJBmpuhQ9UAcs0OSzWKb2FZl6YL"
 							alt="Me as a conscript"
 							width={300}
 							label="Conscript"
