@@ -1,6 +1,6 @@
 import { getBytesBeautifulString } from '@/utils/stringUtils';
 import { useEffect, useMemo, useState } from 'react';
-import LineChart from './DerivativesChart';
+import LineChart from './LineChart';
 import useBitmap, { BitMap } from './useBitmap';
 
 export interface AutostereogramAnalysisProps {
