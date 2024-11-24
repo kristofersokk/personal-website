@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as ExperimentsRoomImport } from './routes/experiments/room'
 import { Route as ExperimentsBoxesImport } from './routes/experiments/boxes'
+import { Route as ExperimentsAutostereogramsImport } from './routes/experiments/autostereograms'
 
 // Create/Update Routes
 
@@ -35,6 +36,14 @@ const ExperimentsBoxesRoute = ExperimentsBoxesImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ExperimentsAutostereogramsRoute = ExperimentsAutostereogramsImport.update(
+  {
+    id: '/experiments/autostereograms',
+    path: '/experiments/autostereograms',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -44,6 +53,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/experiments/autostereograms': {
+      id: '/experiments/autostereograms'
+      path: '/experiments/autostereograms'
+      fullPath: '/experiments/autostereograms'
+      preLoaderRoute: typeof ExperimentsAutostereogramsImport
       parentRoute: typeof rootRoute
     }
     '/experiments/boxes': {
@@ -67,12 +83,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
   '/experiments/boxes': typeof ExperimentsBoxesRoute
   '/experiments/room': typeof ExperimentsRoomRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
   '/experiments/boxes': typeof ExperimentsBoxesRoute
   '/experiments/room': typeof ExperimentsRoomRoute
 }
@@ -80,27 +98,43 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
   '/experiments/boxes': typeof ExperimentsBoxesRoute
   '/experiments/room': typeof ExperimentsRoomRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/experiments/boxes' | '/experiments/room'
+  fullPaths:
+    | '/'
+    | '/experiments/autostereograms'
+    | '/experiments/boxes'
+    | '/experiments/room'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/experiments/boxes' | '/experiments/room'
-  id: '__root__' | '/' | '/experiments/boxes' | '/experiments/room'
+  to:
+    | '/'
+    | '/experiments/autostereograms'
+    | '/experiments/boxes'
+    | '/experiments/room'
+  id:
+    | '__root__'
+    | '/'
+    | '/experiments/autostereograms'
+    | '/experiments/boxes'
+    | '/experiments/room'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExperimentsAutostereogramsRoute: typeof ExperimentsAutostereogramsRoute
   ExperimentsBoxesRoute: typeof ExperimentsBoxesRoute
   ExperimentsRoomRoute: typeof ExperimentsRoomRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExperimentsAutostereogramsRoute: ExperimentsAutostereogramsRoute,
   ExperimentsBoxesRoute: ExperimentsBoxesRoute,
   ExperimentsRoomRoute: ExperimentsRoomRoute,
 }
@@ -116,12 +150,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/experiments/autostereograms",
         "/experiments/boxes",
         "/experiments/room"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/experiments/autostereograms": {
+      "filePath": "experiments/autostereograms.tsx"
     },
     "/experiments/boxes": {
       "filePath": "experiments/boxes.tsx"
