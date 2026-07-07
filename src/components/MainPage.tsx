@@ -65,6 +65,9 @@ function MainPage() {
 						<h3 className="text-slate-200 text-2xl underline">
 							<Link to="/experiments/autostereograms">Autostereograms</Link>
 						</h3>
+						<h3 className="text-slate-200 text-2xl underline">
+							<Link to="/experiments/deep-linking">Deep linking</Link>
+						</h3>
 					</div>
 				</div>
 				<div className="flex flex-wrap justify-center gap-4">

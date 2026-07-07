@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as ExperimentsRoomImport } from './routes/experiments/room'
+import { Route as ExperimentsDeepLinkingImport } from './routes/experiments/deep-linking'
 import { Route as ExperimentsBoxesImport } from './routes/experiments/boxes'
 import { Route as ExperimentsAutostereogramsImport } from './routes/experiments/autostereograms'
 
@@ -27,6 +28,12 @@ const IndexRoute = IndexImport.update({
 const ExperimentsRoomRoute = ExperimentsRoomImport.update({
   id: '/experiments/room',
   path: '/experiments/room',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ExperimentsDeepLinkingRoute = ExperimentsDeepLinkingImport.update({
+  id: '/experiments/deep-linking',
+  path: '/experiments/deep-linking',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -69,6 +76,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperimentsBoxesImport
       parentRoute: typeof rootRoute
     }
+    '/experiments/deep-linking': {
+      id: '/experiments/deep-linking'
+      path: '/experiments/deep-linking'
+      fullPath: '/experiments/deep-linking'
+      preLoaderRoute: typeof ExperimentsDeepLinkingImport
+      parentRoute: typeof rootRoute
+    }
     '/experiments/room': {
       id: '/experiments/room'
       path: '/experiments/room'
@@ -85,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
   '/experiments/boxes': typeof ExperimentsBoxesRoute
+  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
   '/experiments/room': typeof ExperimentsRoomRoute
 }
 
@@ -92,6 +107,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
   '/experiments/boxes': typeof ExperimentsBoxesRoute
+  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
   '/experiments/room': typeof ExperimentsRoomRoute
 }
 
@@ -100,6 +116,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
   '/experiments/boxes': typeof ExperimentsBoxesRoute
+  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
   '/experiments/room': typeof ExperimentsRoomRoute
 }
 
@@ -109,18 +126,21 @@ export interface FileRouteTypes {
     | '/'
     | '/experiments/autostereograms'
     | '/experiments/boxes'
+    | '/experiments/deep-linking'
     | '/experiments/room'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/experiments/autostereograms'
     | '/experiments/boxes'
+    | '/experiments/deep-linking'
     | '/experiments/room'
   id:
     | '__root__'
     | '/'
     | '/experiments/autostereograms'
     | '/experiments/boxes'
+    | '/experiments/deep-linking'
     | '/experiments/room'
   fileRoutesById: FileRoutesById
 }
@@ -129,6 +149,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExperimentsAutostereogramsRoute: typeof ExperimentsAutostereogramsRoute
   ExperimentsBoxesRoute: typeof ExperimentsBoxesRoute
+  ExperimentsDeepLinkingRoute: typeof ExperimentsDeepLinkingRoute
   ExperimentsRoomRoute: typeof ExperimentsRoomRoute
 }
 
@@ -136,6 +157,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExperimentsAutostereogramsRoute: ExperimentsAutostereogramsRoute,
   ExperimentsBoxesRoute: ExperimentsBoxesRoute,
+  ExperimentsDeepLinkingRoute: ExperimentsDeepLinkingRoute,
   ExperimentsRoomRoute: ExperimentsRoomRoute,
 }
 
@@ -152,6 +174,7 @@ export const routeTree = rootRoute
         "/",
         "/experiments/autostereograms",
         "/experiments/boxes",
+        "/experiments/deep-linking",
         "/experiments/room"
       ]
     },
@@ -163,6 +186,9 @@ export const routeTree = rootRoute
     },
     "/experiments/boxes": {
       "filePath": "experiments/boxes.tsx"
+    },
+    "/experiments/deep-linking": {
+      "filePath": "experiments/deep-linking.tsx"
     },
     "/experiments/room": {
       "filePath": "experiments/room.tsx"
