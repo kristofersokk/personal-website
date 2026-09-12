@@ -10,5 +10,3 @@ export const Route = createFileRoute('/experiments/deep-linking')({
 function DeepLinkingExperiment() {
 	return <DeepLinking />;
 }
-
-export default DeepLinkingExperiment;

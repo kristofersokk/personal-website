@@ -8,50 +8,56 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as ExperimentsDeepLinkingRouteImport } from './routes/experiments/deep-linking'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as ExperimentsRoomImport } from './routes/experiments/room'
-import { Route as ExperimentsDeepLinkingImport } from './routes/experiments/deep-linking'
-import { Route as ExperimentsBoxesImport } from './routes/experiments/boxes'
-import { Route as ExperimentsAutostereogramsImport } from './routes/experiments/autostereograms'
-
-// Create/Update Routes
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ExperimentsRoomRoute = ExperimentsRoomImport.update({
-  id: '/experiments/room',
-  path: '/experiments/room',
-  getParentRoute: () => rootRoute,
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ExperimentsDeepLinkingRoute = ExperimentsDeepLinkingImport.update({
+const ExperimentsDeepLinkingRoute = ExperimentsDeepLinkingRouteImport.update({
   id: '/experiments/deep-linking',
   path: '/experiments/deep-linking',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
-const ExperimentsBoxesRoute = ExperimentsBoxesImport.update({
-  id: '/experiments/boxes',
-  path: '/experiments/boxes',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ExperimentsAutostereogramsRoute = ExperimentsAutostereogramsImport.update(
-  {
-    id: '/experiments/autostereograms',
-    path: '/experiments/autostereograms',
-    getParentRoute: () => rootRoute,
-  } as any,
-)
-
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/$' | '/experiments/deep-linking'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/$' | '/experiments/deep-linking'
+  id: '__root__' | '/' | '/$' | '/experiments/deep-linking'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
+  ExperimentsDeepLinkingRoute: typeof ExperimentsDeepLinkingRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -59,140 +65,31 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/experiments/autostereograms': {
-      id: '/experiments/autostereograms'
-      path: '/experiments/autostereograms'
-      fullPath: '/experiments/autostereograms'
-      preLoaderRoute: typeof ExperimentsAutostereogramsImport
-      parentRoute: typeof rootRoute
-    }
-    '/experiments/boxes': {
-      id: '/experiments/boxes'
-      path: '/experiments/boxes'
-      fullPath: '/experiments/boxes'
-      preLoaderRoute: typeof ExperimentsBoxesImport
-      parentRoute: typeof rootRoute
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/experiments/deep-linking': {
       id: '/experiments/deep-linking'
       path: '/experiments/deep-linking'
       fullPath: '/experiments/deep-linking'
-      preLoaderRoute: typeof ExperimentsDeepLinkingImport
-      parentRoute: typeof rootRoute
-    }
-    '/experiments/room': {
-      id: '/experiments/room'
-      path: '/experiments/room'
-      fullPath: '/experiments/room'
-      preLoaderRoute: typeof ExperimentsRoomImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof ExperimentsDeepLinkingRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
-}
-
-// Create and export the route tree
-
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
-  '/experiments/boxes': typeof ExperimentsBoxesRoute
-  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
-  '/experiments/room': typeof ExperimentsRoomRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
-  '/experiments/boxes': typeof ExperimentsBoxesRoute
-  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
-  '/experiments/room': typeof ExperimentsRoomRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/experiments/autostereograms': typeof ExperimentsAutostereogramsRoute
-  '/experiments/boxes': typeof ExperimentsBoxesRoute
-  '/experiments/deep-linking': typeof ExperimentsDeepLinkingRoute
-  '/experiments/room': typeof ExperimentsRoomRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/experiments/autostereograms'
-    | '/experiments/boxes'
-    | '/experiments/deep-linking'
-    | '/experiments/room'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/experiments/autostereograms'
-    | '/experiments/boxes'
-    | '/experiments/deep-linking'
-    | '/experiments/room'
-  id:
-    | '__root__'
-    | '/'
-    | '/experiments/autostereograms'
-    | '/experiments/boxes'
-    | '/experiments/deep-linking'
-    | '/experiments/room'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ExperimentsAutostereogramsRoute: typeof ExperimentsAutostereogramsRoute
-  ExperimentsBoxesRoute: typeof ExperimentsBoxesRoute
-  ExperimentsDeepLinkingRoute: typeof ExperimentsDeepLinkingRoute
-  ExperimentsRoomRoute: typeof ExperimentsRoomRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ExperimentsAutostereogramsRoute: ExperimentsAutostereogramsRoute,
-  ExperimentsBoxesRoute: ExperimentsBoxesRoute,
+  SplatRoute: SplatRoute,
   ExperimentsDeepLinkingRoute: ExperimentsDeepLinkingRoute,
-  ExperimentsRoomRoute: ExperimentsRoomRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/experiments/autostereograms",
-        "/experiments/boxes",
-        "/experiments/deep-linking",
-        "/experiments/room"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/experiments/autostereograms": {
-      "filePath": "experiments/autostereograms.tsx"
-    },
-    "/experiments/boxes": {
-      "filePath": "experiments/boxes.tsx"
-    },
-    "/experiments/deep-linking": {
-      "filePath": "experiments/deep-linking.tsx"
-    },
-    "/experiments/room": {
-      "filePath": "experiments/room.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

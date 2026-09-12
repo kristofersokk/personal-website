@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+	--font-AntipastoPro: 'AntipastoPro', sans-serif;
+}
 
 .absolute {
 	overflow: hidden;
@@ -16,7 +18,7 @@ body {
 }
 
 #root {
-	@apply w-full min-h-[100dvh];
+	@apply w-full min-h-dvh;
 }
 
 @font-face {

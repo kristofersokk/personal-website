@@ -17,7 +17,7 @@ function MainPage() {
 	return (
 		<div className="w-full h-full flex flex-col items-center pt-8">
 			<div className="flex flex-wrap justify-center gap-8 mx-8 mb-16">
-				<div className="flex flex-col flex-grow p-4 text-wrap xl:max-w-xl">
+				<div className="flex flex-col grow p-4 text-wrap xl:max-w-xl">
 					<p className="text-slate-200 text-5xl font-AntipastoPro">Hi!</p>
 					<p className="text-slate-200 text-5xl font-AntipastoPro">I'm Kristofer Sokk</p>
 					<p className="text-slate-200 text-3xl mt-8">
@@ -56,15 +56,6 @@ function MainPage() {
 						Experiments (enter at own risk)
 					</h2>
 					<div className="flex flex-col mt-6 gap-2">
-						<h3 className="text-slate-200 text-2xl underline">
-							<Link to="/experiments/boxes">3D cubes</Link>
-						</h3>
-						<h3 className="text-slate-200 text-2xl underline">
-							<Link to="/experiments/room">3D render of my work table</Link>
-						</h3>
-						<h3 className="text-slate-200 text-2xl underline">
-							<Link to="/experiments/autostereograms">Autostereograms</Link>
-						</h3>
 						<h3 className="text-slate-200 text-2xl underline">
 							<Link to="/experiments/deep-linking">Deep linking</Link>
 						</h3>

@@ -8,7 +8,7 @@ const DeepLinking = () => {
 			<input
 				value={deepLink}
 				onChange={(e) => setDeepLink(e.target.value)}
-				className="text-slate-800 p-2 rounded-md w-96 max-w-[80vw]"
+				className="text-slate-800 bg-gray-200 p-2 rounded-md w-96 max-w-[80vw]"
 			/>
 			<a href={deepLink}>Link to {deepLink}</a>
 			<button
