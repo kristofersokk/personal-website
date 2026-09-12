@@ -1,4 +1,6 @@
-import { useMemo } from 'react';
+import { detectPeaks } from '@/utils/dataUtils';
+import { combineDeferredValues, Deferred, deferredValue } from '@/utils/deferredUtils';
+import { useEffect, useMemo, useState } from 'react';
 
 export type BitMap = {
 	byteArray: Uint8ClampedArray;
@@ -6,13 +8,13 @@ export type BitMap = {
 };
 
 const PIXEL_MATCH_THRESHOLD = 10;
-const MIN_DERIVATIVE_SHIFT = 10;
 
 const getImageDerivative = (bitmap: BitMap, shiftWidth: number) => {
 	const imageWidth = bitmap.width;
 	const imageHeight = bitmap.byteArray.length / (imageWidth * 4);
+	const byteArray = bitmap.byteArray;
 
-	let allPixelsCount = bitmap.byteArray.length;
+	let allPixelsCount = (imageWidth - shiftWidth) * imageHeight;
 	let matchingPixelsCount = 0;
 
 	for (let x = 0; x < imageWidth - shiftWidth; x += 1) {
@@ -20,9 +22,9 @@ const getImageDerivative = (bitmap: BitMap, shiftWidth: number) => {
 			const i = y * imageWidth + x;
 			const shiftedI = i + shiftWidth * 4;
 			const diff =
-				Math.abs(bitmap.byteArray[i] - bitmap.byteArray[shiftedI]) +
-				Math.abs(bitmap.byteArray[i + 1] - bitmap.byteArray[shiftedI + 1]) +
-				Math.abs(bitmap.byteArray[i + 2] - bitmap.byteArray[shiftedI + 2]);
+				Math.abs(byteArray[i] - byteArray[shiftedI]) +
+				Math.abs(byteArray[i + 1] - byteArray[shiftedI + 1]) +
+				Math.abs(byteArray[i + 2] - byteArray[shiftedI + 2]);
 
 			if (diff < PIXEL_MATCH_THRESHOLD) {
 				matchingPixelsCount++;
@@ -30,48 +32,43 @@ const getImageDerivative = (bitmap: BitMap, shiftWidth: number) => {
 		}
 	}
 
-	return (matchingPixelsCount / allPixelsCount / (bitmap.width - shiftWidth)) * bitmap.width;
+	return Math.round((matchingPixelsCount / allPixelsCount) * 10000) / 100;
 };
 
-const getImageDerivatives = (bitmap: BitMap) => {
-	const derivatives: number[] = [];
-	const min = MIN_DERIVATIVE_SHIFT;
-	const max = bitmap.width / 2 - 3;
-	console.log(bitmap.width, min, max);
+const getImageDerivatives = (bitmap: BitMap, increaseDoneCounter: () => void) => {
+	const min = 15;
+	const max = bitmap.width / 2 - 15;
 
-	for (let i = min; i < bitmap.width / 2 - 2; i++) {
-		derivatives.push(getImageDerivative(bitmap, i));
+	const derivateDeferreds: Deferred<number, Error>[] = [];
+	for (let i = min; i < max; i++) {
+		derivateDeferreds.push(
+			deferredValue(() => getImageDerivative(bitmap, i)).also(increaseDoneCounter),
+		);
 	}
 
-	return { min, values: derivatives };
-};
+	const combinedDerivatives = combineDeferredValues(derivateDeferreds);
 
-const getFrequencySums = (derivatives: { values: number[]; min: number }) => {
-	const newValues: number[] = [];
-	const values = new Array<number>(derivatives.min).fill(0).concat(derivatives.values);
-	const minF = 10;
-	const maxF = values.length - 1;
-
-	for (let i = minF; i <= maxF; i++) {
-		let sum = 0;
-		let count = 0;
-		for (let j = i; j < maxF; j += i) {
-			sum += values[j];
-			count++;
-		}
-		newValues.push(sum / count);
-	}
-
-	return { min: minF, values: newValues };
+	return combinedDerivatives.map((derivatives) => ({ min, values: derivatives }));
 };
 
 const useBitmap = (bitmap: BitMap | undefined) => {
-	const derivatives = useMemo(() => (bitmap ? getImageDerivatives(bitmap) : undefined), [bitmap]);
+	const [derivatives, setDerivatives] = useState<{ min: number; values: number[] }>();
+	const [doneCounter, setDoneCounter] = useState(0);
 
-	const secondDerivatives = useMemo(
-		() => (derivatives ? getFrequencySums(derivatives) : undefined),
+	const peaks = useMemo(
+		() => (derivatives?.values ? detectPeaks(derivatives.values, 20, 4, 0.95) : undefined),
 		[derivatives],
 	);
+
+	console.log('Peaks:', peaks);
+
+	useEffect(() => {
+		if (bitmap) {
+			getImageDerivatives(bitmap, () => {
+				// setDoneCounter((prev) => prev + 1);
+			}).then(setDerivatives);
+		}
+	}, [bitmap]);
 
 	if (!bitmap) {
 		return {};
@@ -79,7 +76,8 @@ const useBitmap = (bitmap: BitMap | undefined) => {
 
 	return {
 		derivatives,
-		secondDerivatives,
+		doneCounter,
+		peaks,
 	};
 };
 

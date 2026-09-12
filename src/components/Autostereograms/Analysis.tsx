@@ -1,7 +1,18 @@
 import { getBytesBeautifulString } from '@/utils/stringUtils';
 import { useEffect, useMemo, useState } from 'react';
-import LineChart from './LineChart';
+import {
+	CartesianGrid,
+	ComposedChart,
+	Line,
+	ResponsiveContainer,
+	Scatter,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from 'recharts';
+
 import useBitmap, { BitMap } from './useBitmap';
+import { max } from 'three/webgpu';
 
 export interface AutostereogramAnalysisProps {
 	image: File;
@@ -33,7 +44,19 @@ function AutostereogramAnalysis({ image, imageWidth, imageHeight }: Autostereogr
 		}
 	}, [ctx, image]);
 
-	const { derivatives, secondDerivatives } = useBitmap(bitmap);
+	const { derivatives, doneCounter, peaks } = useBitmap(bitmap);
+
+	const maxPeak = peaks?.reduce(
+		(max, peak) => (peak.avgDiff > (max?.avgDiff || 0) ? peak : max),
+		undefined as
+			| {
+					x: number;
+					avgDiff: number;
+			  }
+			| undefined,
+	);
+
+	console.log('Derivatives:', derivatives);
 
 	return (
 		<div>
@@ -51,13 +74,40 @@ function AutostereogramAnalysis({ image, imageWidth, imageHeight }: Autostereogr
 				height={imageHeight}
 				className="hidden"
 			/>
-			{derivatives && secondDerivatives && (
-				<>
-					<p className="my-2 text-lg">Derivatives:</p>
-					<LineChart values={derivatives.values} min={derivatives.min} />
-					<p className="my-2 text-lg">Second derivatives:</p>
-					<LineChart values={secondDerivatives.values} min={secondDerivatives.min} />
-				</>
+			<p className="my-2 text-lg">Derivatives:</p>
+			<p className="mb-2">Progress: {doneCounter}</p>
+			{derivatives && (
+				<ComposedChart
+					className="bg-white overflow-auto"
+					width={730}
+					height={300}
+					data={derivatives.values.map((value, index) => ({
+						x: index + derivatives.min,
+						y: value,
+						peakY: peaks?.some((peak) => peak.x === index) ? value : undefined,
+						maxPeakY: index === maxPeak?.x ? value : undefined,
+					}))}
+					margin={{ top: 20, right: 30, left: 10, bottom: 5 }}
+				>
+					<XAxis dataKey="x" />
+					<YAxis
+						domain={([dataMin, dataMax]) => {
+							const diff = Math.round(dataMax - dataMin);
+							return [Math.max(0, dataMin - diff * 0.1), dataMax + diff * 0.1];
+						}}
+					/>
+					<Tooltip />
+					<CartesianGrid stroke="#ddd" />
+					<Line
+						type="monotone"
+						dataKey="y"
+						stroke="#8884d8"
+						strokeWidth={2}
+						dot={false}
+					/>
+					<Scatter dataKey="peakY" fill="#889458" />
+					<Scatter dataKey="maxPeakY" fill="#ff4300" />
+				</ComposedChart>
 			)}
 		</div>
 	);
